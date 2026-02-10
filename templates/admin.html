@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel Admin</title>
+</head>
+<body>
+    <h2>Panel de administrador</h2>
+    <table border="1">
+        <tr><th>Usuario</th><th>Contraseña</th></tr>
+        {% for usuario, contrasena in datos %}
+        <tr><td>{{ usuario }}</td><td>{{ contrasena }}</td></tr>
+        {% endfor %}
+    </table>
+    <a href="/">Cerrar sesión</a>
+</body>
+</html>

